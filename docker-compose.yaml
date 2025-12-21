@@ -1,0 +1,33 @@
+services:
+
+# docker run ... --security-opt  
+
+  music-assistant:
+    image: ghcr.io/music-assistant/server:${MUSIC_ASSISTANT_VERSION:-2}
+    env_file: environment.d/music-assistant.env
+    cap_add: [DAC_READ_SEARCH, SYS_ADMIN]
+    security_opt: [apparmor:unconfined]
+    network_mode: ${NETWORK_MODE:-host}
+    volumes:
+      - ${DATA_VOLUME:-music-assistant-data}:/data
+      - ${MEDIA_PATH:-music-assistant-media}:/media
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      com.centurylinklabs.watchtower.scope: ${COMPOSE_PROJECT_NAME}
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower:${WATCHTOWER_VERSION:-latest}
+    env_file: environment.d/watchtower.env
+    environment:
+      WATCHTOWER_SCOPE: ${COMPOSE_PROJECT_NAME}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      com.centurylinklabs.watchtower.scope: ${COMPOSE_PROJECT_NAME}
+    restart: unless-stopped
+
+volumes:
+  music-assistant-data: {}
+  music-assistant-media: {}
