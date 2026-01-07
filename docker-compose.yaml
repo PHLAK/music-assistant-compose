@@ -1,7 +1,5 @@
 services:
 
-# docker run ... --security-opt  
-
   music-assistant:
     image: ghcr.io/music-assistant/server:${MUSIC_ASSISTANT_VERSION:-2}
     env_file: environment.d/music-assistant.env
