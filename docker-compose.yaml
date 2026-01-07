@@ -9,8 +9,8 @@ services:
     security_opt: [apparmor:unconfined]
     network_mode: ${NETWORK_MODE:-host}
     volumes:
-      - ${DATA_VOLUME:-music-assistant-data}:/data
-      - ${MEDIA_PATH:-music-assistant-media}:/media
+      - ${DATA_PATH:-./volumes/data}:/data
+      - ${MEDIA_PATH:?MEDIA_PATH is required}:/media
       - /etc/localtime:/etc/localtime:ro
     labels:
       com.centurylinklabs.watchtower.scope: ${COMPOSE_PROJECT_NAME}
